@@ -1,0 +1,5 @@
+.wordleSquare {
+	height: 62px;
+	width: 62px;
+	border: 2px solid grey;
+}

@@ -11,6 +11,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.6",
+    "@microsoft/signalr": "^8.0.7",
     "@mui/material": "^7.1.2",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
@@ -28,6 +30,7 @@
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3",
     "vite": "^6.3.3",
+    "vite-plugin-devtools-json": "^0.2.0",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
