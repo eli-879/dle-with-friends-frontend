@@ -9,7 +9,7 @@ export default function App() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		console.log('HubConnectionProvider mounted');
+		console.log('HubConndectionProvider mounted');
 
 		const signalRConnection = new HubConnectionBuilder()
 			.withUrl('https://localhost:7224/gamehub', {
