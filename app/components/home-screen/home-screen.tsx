@@ -1,44 +1,55 @@
-import { Typography } from '@mui/material';
-import styles from './home-screen.module.css';
+import { TextField, Typography } from '@mui/material';
+import { redirect, useNavigate } from 'react-router';
+import type AppState from '~/models/appState';
 import GameButtons from './game-buttons/game-buttons';
-import type { HubConnection } from '@microsoft/signalr';
+import styles from './home-screen.module.css';
 
-interface HomeScreenProps {
-	connection: HubConnection;
-}
+export default function HomeScreen({
+    connection,
+    nickname,
+    setNickname,
+}: AppState) {
+    const navigate = useNavigate();
 
-export default function HomeScreen({ connection }: HomeScreenProps) {
-	async function createRoom() {
-		try {
-			if (connection) {
-				await connection.start();
-				console.log('connected');
+    async function createRoom() {
+        try {
+            if (connection) {
+                await connection.start();
+                console.log('connected');
 
-				await connection.invoke('CreateRoom');
-			}
-		} catch (e) {}
-	}
+                await connection.invoke('CreateRoom', nickname);
+                return redirect('/lobby');
+            }
+        } catch (e) {}
+    }
 
-	async function joinRoom() {
-		try {
-			if (connection) {
-				await connection.start();
+    async function joinRoomScreen() {
+        navigate('/join-game');
+    }
 
-				console.log('connected');
+    return (
+        <>
+            <div className={styles.homeScreen}>
+                <Typography variant="h1" component="h2">
+                    Wordle With Friends
+                </Typography>
 
-				await connection.invoke('JoinRoom', 'hBzFp');
-			}
-		} catch (e) {}
-	}
+                <TextField
+                    id="outlined-basic"
+                    label="Enter your nickname"
+                    variant="outlined"
+                    value={nickname}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setNickname!(event.target.value);
+                    }}
+                />
 
-	return (
-		<>
-			<div className={styles.homeScreen}>
-				<Typography variant='h1' component='h2'>
-					Wordle With Friends
-				</Typography>
-				<GameButtons onCreateRoom={createRoom} onJoinRoom={joinRoom} />
-			</div>
-		</>
-	);
+                <GameButtons
+                    disableButtons={nickname.length === 0}
+                    onCreateRoom={createRoom}
+                    onJoinRoom={joinRoomScreen}
+                />
+            </div>
+        </>
+    );
 }

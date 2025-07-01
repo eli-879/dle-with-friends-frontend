@@ -1,17 +1,17 @@
 import { useOutletContext } from 'react-router';
+import JoinGameScreen from '~/components/join-game-screen/join-game-screen';
+import Navbar from '~/components/navbar/navbar';
 import type AppState from '~/models/appState';
-import HomeScreen from '../components/home-screen/home-screen';
-import Navbar from '../components/navbar/navbar';
 
-export default function Home() {
+export default function JoinGame() {
     const state: AppState = useOutletContext();
+
     return (
         <>
             <Navbar />
-            <HomeScreen
+            <JoinGameScreen
                 connection={state.connection}
                 nickname={state.nickname}
-                setNickname={state.setNickname}
             />
         </>
     );
