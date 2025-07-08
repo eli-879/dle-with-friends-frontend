@@ -1,0 +1,16 @@
+.keyboardButton {
+    padding: 12px;
+    min-width: 48px;
+    border-style: solid;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+}
+
+.keyboardButton:hover {
+    background-color: grey;
+}
+
+.keyboardButton:active {
+    background-color: darkgray;
+}

@@ -1,0 +1,7 @@
+.gameScreen {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+}

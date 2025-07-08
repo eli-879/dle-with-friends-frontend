@@ -1,6 +1,6 @@
 import type GameState from './gameState';
 
-export default interface PlayerDtoIn {
+export default interface GamePlayer {
     id: string;
     name: string;
     gameState: GameState;
