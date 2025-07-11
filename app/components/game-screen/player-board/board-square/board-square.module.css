@@ -1,4 +1,10 @@
 .boardSquare {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-style: solid;
-    padding: 30px;
+    height: 62px;
+    width: 62px;
+    font-size: 30px;
+    font-weight: bold;
 }

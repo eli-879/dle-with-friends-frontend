@@ -7,6 +7,7 @@ import type PlayerDtoIn from '~/models/playerDtoIn';
 import styles from './game-screen.module.css';
 import Keyboard from './keyboard/keyboard';
 import PlayerBoard from './player-board/player-board';
+import type GameState from '~/models/gameState';
 
 export const GameContext = createContext<{
     currentGuess: CurrentGuess;
@@ -58,10 +59,33 @@ export default function GameScreen({ connection, nickname }: AppState) {
     }
 
     function handleEditCurrentGuess(keyValue: string) {
-        setCurrentGuess({
-            ...currentGuess,
-            currentWord: currentGuess.currentWord + keyValue,
+        createNewGuess(keyValue).then((res) => {
+            setCurrentGuess({
+                ...currentGuess,
+                currentWord: res,
+            });
         });
+    }
+
+    async function createNewGuess(keyValue: string): Promise<string> {
+        console.log('new guess', keyValue);
+        let current = currentGuess.currentWord;
+
+        if (current.length === 5 && keyValue !== 'Enter' && keyValue !== '⌫') {
+            return Promise.resolve(current);
+        }
+
+        if (keyValue === '⌫') {
+            return Promise.resolve(current.slice(0, current.length - 1));
+        }
+
+        if (keyValue === 'Enter') {
+            console.log('invoke');
+            await connection.invoke('SendGuess', gameId, nickname, current);
+            return Promise.resolve('');
+        }
+
+        return Promise.resolve(current + keyValue);
     }
 
     useEffect(() => {
@@ -79,8 +103,13 @@ export default function GameScreen({ connection, nickname }: AppState) {
             setPlayerStates(gamePlayers);
         };
 
+        const handleReceieveGuess = (receivedPlayers: PlayerDtoIn[]) => {
+            console.log('Received Guess', receivedPlayers);
+        };
+
         connection.on('ReceivePlayers', handleReceivePlayers);
 
+        connection.on('ReceiveGuess', handleReceieveGuess);
         connectToLobby();
 
         return () => {
@@ -104,9 +133,9 @@ export default function GameScreen({ connection, nickname }: AppState) {
                 <GameContext value={value}>
                     <PlayerBoard
                         currentGuess={currentGuess}
-                        guessFeedbacks={
+                        gameState={
                             playerStates.find((ps) => ps.name === nickname)
-                                ?.gameState.guessFeedbacks!
+                                ?.gameState!
                         }
                     ></PlayerBoard>
                     <Keyboard
